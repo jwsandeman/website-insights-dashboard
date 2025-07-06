@@ -13,7 +13,6 @@ import type {
   FilterApi,
   FunctionReference,
 } from "convex/server";
-import type * as auth from "../auth.js";
 import type * as dashboard from "../dashboard.js";
 import type * as googleApi from "../googleApi.js";
 import type * as http from "../http.js";
@@ -28,7 +27,6 @@ import type * as router from "../router.js";
  * ```
  */
 declare const fullApi: ApiFromModules<{
-  auth: typeof auth;
   dashboard: typeof dashboard;
   googleApi: typeof googleApi;
   http: typeof http;

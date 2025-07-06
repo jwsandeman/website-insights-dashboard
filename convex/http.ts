@@ -1,9 +1,7 @@
-// import { auth } from "./auth";
 import router from "./router";
 
 const http = router;
 
-// Note: auth.addHttpRoutes is disabled since we use custom auth
-// auth.addHttpRoutes(http);
+// Note: No Convex Auth routes needed - we use custom session-based auth
 
 export default http;

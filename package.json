@@ -20,7 +20,6 @@
     "fix-all": "npm-run-all --sequential lint:fix format"
   },
   "dependencies": {
-    "@convex-dev/auth": "^0.0.80",
     "@remix-run/dev": "^2.16.8",
     "@remix-run/node": "^2.16.8",
     "@remix-run/react": "^2.16.8",
