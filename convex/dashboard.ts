@@ -1,5 +1,6 @@
 import { query, mutation } from "./_generated/server";
 import { v } from "convex/values";
+import { getGoogleOAuthConfig } from "./env";
 
 // Client authentication for dashboard
 export const authenticateClient = mutation({
@@ -134,6 +135,9 @@ export const generateGoogleAuthUrl = mutation({
     sessionToken: v.string(),
   },
   handler: async (ctx, args) => {
+    // Validate Google OAuth configuration
+    const config = getGoogleOAuthConfig();
+
     // Validate session
     const session = await ctx.db
       .query("dashboardSessions")
@@ -159,8 +163,8 @@ export const generateGoogleAuthUrl = mutation({
 
     const authUrl =
       `https://accounts.google.com/o/oauth2/v2/auth?` +
-      `client_id=${process.env.GOOGLE_CLIENT_ID}&` +
-      `redirect_uri=${encodeURIComponent(`${process.env.CONVEX_SITE_URL}/google/callback`)}&` +
+      `client_id=${config.clientId}&` +
+      `redirect_uri=${encodeURIComponent(`${config.siteUrl}/google/callback`)}&` +
       `response_type=code&` +
       `scope=${encodeURIComponent(scopes)}&` +
       `access_type=offline&` +

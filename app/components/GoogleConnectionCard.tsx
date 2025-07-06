@@ -48,9 +48,18 @@ export function GoogleConnectionCard({
         }
       }, 1000);
     } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Failed to connect to Google"
-      );
+      const errorMessage = error instanceof Error ? error.message : "Failed to connect to Google";
+      
+      // Show a more helpful toast for OAuth configuration errors
+      if (errorMessage.includes("Google OAuth not configured")) {
+        toast.error(
+          "Google OAuth not set up. Please configure GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET environment variables.",
+          { duration: 10000 }
+        );
+      } else {
+        toast.error(errorMessage);
+      }
+      
       setIsConnecting(false);
     }
   };

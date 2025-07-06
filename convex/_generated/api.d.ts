@@ -14,6 +14,7 @@ import type {
   FunctionReference,
 } from "convex/server";
 import type * as dashboard from "../dashboard.js";
+import type * as env from "../env.js";
 import type * as googleApi from "../googleApi.js";
 import type * as http from "../http.js";
 import type * as router from "../router.js";
@@ -28,6 +29,7 @@ import type * as router from "../router.js";
  */
 declare const fullApi: ApiFromModules<{
   dashboard: typeof dashboard;
+  env: typeof env;
   googleApi: typeof googleApi;
   http: typeof http;
   router: typeof router;

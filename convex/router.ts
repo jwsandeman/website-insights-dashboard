@@ -29,9 +29,22 @@ http.route({
     }
 
     try {
+      // Check for required environment variables
+      if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
+        throw new Error(
+          "Google OAuth not configured. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET environment variables."
+        );
+      }
+
+      if (!process.env.CONVEX_SITE_URL) {
+        throw new Error(
+          "CONVEX_SITE_URL environment variable not set. This is required for OAuth callback."
+        );
+      }
+
       // Parse state to get session token
       const { sessionToken } = JSON.parse(decodeURIComponent(state));
-
+      
       // Exchange code for tokens
       const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
         method: "POST",
