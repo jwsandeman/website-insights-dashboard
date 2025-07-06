@@ -33,13 +33,16 @@ npm run dev:backend   # Convex dev server
 ## Multi-Tenant Features
 
 ### Current Implementation
+
 - **Tenant Isolation**: Each client belongs to a tenant (domain-based)
 - **Role-based Access**: Admin and Viewer roles
 - **Google Integration**: OAuth for Analytics & Search Console
 - **Session Management**: Secure token-based sessions
 
 ### Demo Data
+
 1. Create demo tenant and client:
+
    ```bash
    # In the app, click "Create Demo Data"
    # Or run the seed function in Convex dashboard
@@ -55,14 +58,16 @@ npm run dev:backend   # Convex dev server
 ### Railway Deployment
 
 1. **Connect GitHub to Railway**:
+
    - Push your code to GitHub
    - Go to [Railway.app](https://railway.app) and create account
-   - Click "Deploy from GitHub repo" 
+   - Click "Deploy from GitHub repo"
    - Select your repository
    - Railway will automatically detect Remix and deploy!
 
 2. **Environment Variables**:
    Set these in Railway dashboard:
+
    ```
    VITE_CONVEX_URL=https://sincere-cow-339.convex.cloud
    GOOGLE_CLIENT_ID=your_google_client_id
@@ -76,11 +81,13 @@ npm run dev:backend   # Convex dev server
 ### Multi-Tenant Setup for Your Clients
 
 1. **For Your Master Account**:
+
    - Create your own tenant with your domain
    - Connect your Google Analytics account
    - Access all client properties you manage
 
 2. **For Client Self-Service**:
+
    - Clients can register with their domain
    - They can connect their own Google accounts
    - View only their own website data
@@ -97,9 +104,10 @@ Chef apps use [Convex Auth](https://auth.convex.dev/) with Anonymous auth for ea
 ## Developing and deploying your app
 
 Check out the [Convex docs](https://docs.convex.dev/) for more information on how to develop with Convex.
-* If you're new to Convex, the [Overview](https://docs.convex.dev/understanding/) is a good place to start
-* Check out the [Hosting and Deployment](https://docs.convex.dev/production/) docs for how to deploy your app
-* Read the [Best Practices](https://docs.convex.dev/understanding/best-practices/) guide for tips on how to improve you app further
+
+- If you're new to Convex, the [Overview](https://docs.convex.dev/understanding/) is a good place to start
+- Check out the [Hosting and Deployment](https://docs.convex.dev/production/) docs for how to deploy your app
+- Read the [Best Practices](https://docs.convex.dev/understanding/best-practices/) guide for tips on how to improve you app further
 
 ## HTTP API
 

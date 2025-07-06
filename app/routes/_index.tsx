@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useMutation, useQuery } from "convex/react";
+import { useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { LoginForm } from "~/components/LoginForm";
 import { Dashboard } from "~/components/Dashboard";
@@ -53,8 +53,8 @@ export default function Index() {
   return (
     <div className="min-h-screen bg-gray-900">
       {sessionToken && sessionData ? (
-        <Dashboard 
-          sessionToken={sessionToken} 
+        <Dashboard
+          sessionToken={sessionToken}
           sessionData={sessionData}
           onLogout={handleLogout}
         />

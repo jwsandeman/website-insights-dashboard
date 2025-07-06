@@ -1,5 +1,5 @@
 {
-  "name": "flex-template",
+  "name": "website-insights-dashboard",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,7 +9,15 @@
     "dev:frontend": "remix dev --manual",
     "dev:backend": "convex dev",
     "start": "remix-serve build",
-    "lint": "tsc -p convex -noEmit --pretty false && tsc -p . -noEmit --pretty false && convex dev --once && remix build"
+    "type-check": "tsc --noEmit",
+    "type-check:convex": "tsc -p convex --noEmit",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "convex:check": "convex dev --once",
+    "pre-check": "npm-run-all --sequential type-check type-check:convex lint format:check build",
+    "fix-all": "npm-run-all --sequential lint:fix format"
   },
   "dependencies": {
     "@convex-dev/auth": "^0.0.80",

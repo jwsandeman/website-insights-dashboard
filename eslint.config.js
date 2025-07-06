@@ -1,18 +1,17 @@
 import js from "@eslint/js";
 import globals from "globals";
 import reactHooks from "eslint-plugin-react-hooks";
-import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
 export default tseslint.config(
   {
     ignores: [
-      "dist",
+      "build",
+      "public/build",
       "eslint.config.js",
       "convex/_generated",
-      "postcss.config.js",
       "tailwind.config.js",
-      "vite.config.ts",
+      "remix.config.js",
     ],
   },
   {
@@ -28,23 +27,14 @@ export default tseslint.config(
         ...globals.node,
       },
       parserOptions: {
-        project: [
-          "./tsconfig.node.json",
-          "./tsconfig.app.json",
-          "./convex/tsconfig.json",
-        ],
+        project: ["./tsconfig.json", "./convex/tsconfig.json"],
       },
     },
     plugins: {
       "react-hooks": reactHooks,
-      "react-refresh": reactRefresh,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      "react-refresh/only-export-components": [
-        "warn",
-        { allowConstantExport: true },
-      ],
       // All of these overrides ease getting into
       // TypeScript, and can be removed for stricter
       // linting down the line.
@@ -72,6 +62,9 @@ export default tseslint.config(
       // Allow async functions without await
       // for consistency (esp. Convex `handler`s)
       "@typescript-eslint/require-await": "off",
+
+      // Allow async functions in event handlers (common in React)
+      "@typescript-eslint/no-misused-promises": "off",
     },
-  },
+  }
 );

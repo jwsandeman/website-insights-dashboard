@@ -30,7 +30,7 @@ export const fetchGoogleData = action({
 
     // Type assertion since we know this is a tenant document
     const tenantDoc = tenant as any;
-    
+
     if (!tenantDoc.googleAccessToken) {
       throw new Error("Google not connected for this tenant");
     }
@@ -61,26 +61,28 @@ export const fetchGoogleData = action({
       return { success: true };
     } catch (error) {
       console.error("Error fetching Google data:", error);
-      
+
       // If token expired, try to refresh
       if ((error as any).code === 401) {
         try {
           const { credentials } = await oauth2Client.refreshAccessToken();
-          
+
           // Update stored tokens
           await ctx.runMutation(api.dashboard.updateGoogleTokens, {
             tenantId: tenantDoc._id,
             accessToken: credentials.access_token!,
-            expiresIn: credentials.expiry_date ? Math.floor((credentials.expiry_date - Date.now()) / 1000) : 3600,
+            expiresIn: credentials.expiry_date
+              ? Math.floor((credentials.expiry_date - Date.now()) / 1000)
+              : 3600,
           });
 
           // Retry data fetch
           oauth2Client.setCredentials(credentials);
-          
+
           if (tenantDoc.googleAnalyticsPropertyId) {
             await fetchAnalyticsData(ctx, oauth2Client, tenantDoc);
           }
-          
+
           if (tenantDoc.searchConsoleUrl) {
             await fetchSearchConsoleData(ctx, oauth2Client, tenantDoc);
           }
@@ -91,15 +93,18 @@ export const fetchGoogleData = action({
           throw new Error("Google authentication expired. Please reconnect.");
         }
       }
-      
+
       throw error;
     }
   },
 });
 
 async function fetchAnalyticsData(ctx: any, oauth2Client: any, tenant: any) {
-  const analytics = google.analyticsdata({ version: "v1beta", auth: oauth2Client });
-  
+  const analytics = google.analyticsdata({
+    version: "v1beta",
+    auth: oauth2Client,
+  });
+
   const endDate = new Date();
   const startDate = new Date();
   startDate.setDate(startDate.getDate() - 30);
@@ -109,8 +114,8 @@ async function fetchAnalyticsData(ctx: any, oauth2Client: any, tenant: any) {
     requestBody: {
       dateRanges: [
         {
-          startDate: startDate.toISOString().split('T')[0],
-          endDate: endDate.toISOString().split('T')[0],
+          startDate: startDate.toISOString().split("T")[0],
+          endDate: endDate.toISOString().split("T")[0],
         },
       ],
       dimensions: [{ name: "date" }],
@@ -132,7 +137,9 @@ async function fetchAnalyticsData(ctx: any, oauth2Client: any, tenant: any) {
       const users = parseInt(row.metricValues?.[1]?.value || "0");
       const pageviews = parseInt(row.metricValues?.[2]?.value || "0");
       const bounceRate = parseFloat(row.metricValues?.[3]?.value || "0");
-      const avgSessionDuration = parseFloat(row.metricValues?.[4]?.value || "0");
+      const avgSessionDuration = parseFloat(
+        row.metricValues?.[4]?.value || "0"
+      );
 
       if (date) {
         await ctx.runMutation(api.dashboard.upsertMetric, {
@@ -152,9 +159,16 @@ async function fetchAnalyticsData(ctx: any, oauth2Client: any, tenant: any) {
   }
 }
 
-async function fetchSearchConsoleData(ctx: any, oauth2Client: any, tenant: any) {
-  const searchconsole = google.searchconsole({ version: "v1", auth: oauth2Client });
-  
+async function fetchSearchConsoleData(
+  ctx: any,
+  oauth2Client: any,
+  tenant: any
+) {
+  const searchconsole = google.searchconsole({
+    version: "v1",
+    auth: oauth2Client,
+  });
+
   const endDate = new Date();
   const startDate = new Date();
   startDate.setDate(startDate.getDate() - 30);
@@ -162,8 +176,8 @@ async function fetchSearchConsoleData(ctx: any, oauth2Client: any, tenant: any) 
   const response = await searchconsole.searchanalytics.query({
     siteUrl: tenant.searchConsoleUrl,
     requestBody: {
-      startDate: startDate.toISOString().split('T')[0],
-      endDate: endDate.toISOString().split('T')[0],
+      startDate: startDate.toISOString().split("T")[0],
+      endDate: endDate.toISOString().split("T")[0],
       dimensions: ["date"],
       rowLimit: 1000,
     },

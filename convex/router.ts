@@ -31,7 +31,7 @@ http.route({
     try {
       // Parse state to get session token
       const { sessionToken } = JSON.parse(decodeURIComponent(state));
-      
+
       // Exchange code for tokens
       const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
         method: "POST",
@@ -52,7 +52,7 @@ http.route({
       }
 
       const tokens = await tokenResponse.json();
-      
+
       // Store tokens in database
       await ctx.runMutation(api.dashboard.storeGoogleTokens, {
         sessionToken,

@@ -17,8 +17,9 @@ export const links: LinksFunction = () => [
 ];
 
 const convex = new ConvexReactClient(
-  typeof window !== "undefined" 
-    ? (window as any)?.ENV?.VITE_CONVEX_URL || "https://sincere-cow-339.convex.cloud"
+  typeof window !== "undefined"
+    ? (window as any)?.ENV?.VITE_CONVEX_URL ||
+      "https://sincere-cow-339.convex.cloud"
     : "https://sincere-cow-339.convex.cloud"
 );
 

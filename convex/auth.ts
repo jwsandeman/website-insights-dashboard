@@ -1,6 +1,10 @@
+// NOTE: This Convex Auth setup is currently unused.
+// We use custom session-based authentication in dashboard.ts instead.
+// Uncomment and fix imports if you want to use Convex Auth.
+
+/*
 import { convexAuth, getAuthUserId } from "@convex-dev/auth/server";
-import { Password } from "@convex-dev/auth/providers/Password";
-import { Anonymous } from "@convex-dev/auth/providers/Anonymous";
+import { Password, Anonymous } from "@convex-dev/auth/providers";
 import { query } from "./_generated/server";
 
 export const { auth, signIn, signOut, store, isAuthenticated } = convexAuth({
@@ -20,3 +24,9 @@ export const loggedInUser = query({
     return user;
   },
 });
+*/
+
+// Placeholder export to keep the file valid
+export const auth = {
+  addHttpRoutes: () => {},
+};

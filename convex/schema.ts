@@ -43,7 +43,8 @@ const applicationTables = {
       position: v.optional(v.number()),
     }),
     updatedAt: v.number(),
-  }).index("by_tenant_date", ["tenantId", "date"])
+  })
+    .index("by_tenant_date", ["tenantId", "date"])
     .index("by_tenant_source", ["tenantId", "source"]),
 
   dashboardSessions: defineTable({
@@ -52,7 +53,8 @@ const applicationTables = {
     sessionToken: v.string(),
     expiresAt: v.number(),
     createdAt: v.number(),
-  }).index("by_token", ["sessionToken"])
+  })
+    .index("by_token", ["sessionToken"])
     .index("by_client", ["clientId"]),
 };
 

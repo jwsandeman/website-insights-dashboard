@@ -12,7 +12,7 @@ export const authenticateClient = mutation({
     // Find tenant by domain
     const tenant = await ctx.db
       .query("tenants")
-      .withIndex("by_domain", (q) => q.eq("domain", args.tenantDomain))
+      .withIndex("by_domain", q => q.eq("domain", args.tenantDomain))
       .unique();
 
     if (!tenant || !tenant.isActive) {
@@ -22,7 +22,7 @@ export const authenticateClient = mutation({
     // Find client
     const client = await ctx.db
       .query("clients")
-      .withIndex("by_tenant_email", (q) => 
+      .withIndex("by_tenant_email", q =>
         q.eq("tenantId", tenant._id).eq("email", args.email)
       )
       .unique();
@@ -38,9 +38,10 @@ export const authenticateClient = mutation({
     }
 
     // Create session
-    const sessionToken = Math.random().toString(36).substring(2, 15) + 
-                        Math.random().toString(36).substring(2, 15);
-    const expiresAt = Date.now() + (24 * 60 * 60 * 1000); // 24 hours
+    const sessionToken =
+      Math.random().toString(36).substring(2, 15) +
+      Math.random().toString(36).substring(2, 15);
+    const expiresAt = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
 
     await ctx.db.insert("dashboardSessions", {
       clientId: client._id,
@@ -80,7 +81,7 @@ export const validateSession = query({
   handler: async (ctx, args) => {
     const session = await ctx.db
       .query("dashboardSessions")
-      .withIndex("by_token", (q) => q.eq("sessionToken", args.sessionToken))
+      .withIndex("by_token", q => q.eq("sessionToken", args.sessionToken))
       .unique();
 
     if (!session || session.expiresAt < Date.now()) {
@@ -136,7 +137,7 @@ export const generateGoogleAuthUrl = mutation({
     // Validate session
     const session = await ctx.db
       .query("dashboardSessions")
-      .withIndex("by_token", (q) => q.eq("sessionToken", args.sessionToken))
+      .withIndex("by_token", q => q.eq("sessionToken", args.sessionToken))
       .unique();
 
     if (!session || session.expiresAt < Date.now()) {
@@ -148,13 +149,16 @@ export const generateGoogleAuthUrl = mutation({
       throw new Error("Only admins can connect Google services");
     }
 
-    const state = encodeURIComponent(JSON.stringify({ sessionToken: args.sessionToken }));
+    const state = encodeURIComponent(
+      JSON.stringify({ sessionToken: args.sessionToken })
+    );
     const scopes = [
       "https://www.googleapis.com/auth/analytics.readonly",
       "https://www.googleapis.com/auth/webmasters.readonly",
     ].join(" ");
 
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+    const authUrl =
+      `https://accounts.google.com/o/oauth2/v2/auth?` +
       `client_id=${process.env.GOOGLE_CLIENT_ID}&` +
       `redirect_uri=${encodeURIComponent(`${process.env.CONVEX_SITE_URL}/google/callback`)}&` +
       `response_type=code&` +
@@ -178,7 +182,7 @@ export const storeGoogleTokens = mutation({
     // Validate session
     const session = await ctx.db
       .query("dashboardSessions")
-      .withIndex("by_token", (q) => q.eq("sessionToken", args.sessionToken))
+      .withIndex("by_token", q => q.eq("sessionToken", args.sessionToken))
       .unique();
 
     if (!session || session.expiresAt < Date.now()) {
@@ -189,7 +193,7 @@ export const storeGoogleTokens = mutation({
     await ctx.db.patch(session.tenantId, {
       googleAccessToken: args.accessToken,
       googleRefreshToken: args.refreshToken,
-      googleTokenExpiresAt: Date.now() + (args.expiresIn * 1000),
+      googleTokenExpiresAt: Date.now() + args.expiresIn * 1000,
       isGoogleConnected: true,
     });
 
@@ -206,7 +210,7 @@ export const updateGoogleTokens = mutation({
   handler: async (ctx, args) => {
     await ctx.db.patch(args.tenantId as any, {
       googleAccessToken: args.accessToken,
-      googleTokenExpiresAt: Date.now() + (args.expiresIn * 1000),
+      googleTokenExpiresAt: Date.now() + args.expiresIn * 1000,
     });
 
     return { success: true };
@@ -234,10 +238,10 @@ export const upsertMetric = mutation({
     // Check if metric already exists
     const existing = await ctx.db
       .query("metrics")
-      .withIndex("by_tenant_date", (q) => 
+      .withIndex("by_tenant_date", q =>
         q.eq("tenantId", args.tenantId as any).eq("date", args.date)
       )
-      .filter((q) => q.eq(q.field("source"), args.source))
+      .filter(q => q.eq(q.field("source"), args.source))
       .unique();
 
     if (existing) {
@@ -269,7 +273,7 @@ export const disconnectGoogle = mutation({
     // Validate session
     const session = await ctx.db
       .query("dashboardSessions")
-      .withIndex("by_token", (q) => q.eq("sessionToken", args.sessionToken))
+      .withIndex("by_token", q => q.eq("sessionToken", args.sessionToken))
       .unique();
 
     if (!session || session.expiresAt < Date.now()) {
@@ -302,7 +306,7 @@ export const getDashboardMetrics = query({
     // Validate session inline to avoid circular dependency
     const session = await ctx.db
       .query("dashboardSessions")
-      .withIndex("by_token", (q) => q.eq("sessionToken", args.sessionToken))
+      .withIndex("by_token", q => q.eq("sessionToken", args.sessionToken))
       .unique();
 
     if (!session || session.expiresAt < Date.now()) {
@@ -319,34 +323,63 @@ export const getDashboardMetrics = query({
     const daysBack = args.dateRange || 30;
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - daysBack);
-    const startDateStr = startDate.toISOString().split('T')[0];
+    const startDateStr = startDate.toISOString().split("T")[0];
 
     const metrics = await ctx.db
       .query("metrics")
-      .withIndex("by_tenant_date", (q) => 
+      .withIndex("by_tenant_date", q =>
         q.eq("tenantId", tenant._id).gte("date", startDateStr)
       )
       .collect();
 
     // Aggregate metrics with explicit typing
     const analytics = metrics.filter((m: any) => m.source === "analytics");
-    const searchConsole = metrics.filter((m: any) => m.source === "search_console");
+    const searchConsole = metrics.filter(
+      (m: any) => m.source === "search_console"
+    );
 
-    const totalSessions = analytics.reduce((sum: number, m: any) => sum + (m.data.sessions || 0), 0);
-    const totalUsers = analytics.reduce((sum: number, m: any) => sum + (m.data.users || 0), 0);
-    const totalPageviews = analytics.reduce((sum: number, m: any) => sum + (m.data.pageviews || 0), 0);
-    const avgBounceRate = analytics.length > 0 
-      ? analytics.reduce((sum: number, m: any) => sum + (m.data.bounceRate || 0), 0) / analytics.length 
-      : 0;
+    const totalSessions = analytics.reduce(
+      (sum: number, m: any) => sum + (m.data.sessions || 0),
+      0
+    );
+    const totalUsers = analytics.reduce(
+      (sum: number, m: any) => sum + (m.data.users || 0),
+      0
+    );
+    const totalPageviews = analytics.reduce(
+      (sum: number, m: any) => sum + (m.data.pageviews || 0),
+      0
+    );
+    const avgBounceRate =
+      analytics.length > 0
+        ? analytics.reduce(
+            (sum: number, m: any) => sum + (m.data.bounceRate || 0),
+            0
+          ) / analytics.length
+        : 0;
 
-    const totalClicks = searchConsole.reduce((sum: number, m: any) => sum + (m.data.clicks || 0), 0);
-    const totalImpressions = searchConsole.reduce((sum: number, m: any) => sum + (m.data.impressions || 0), 0);
-    const avgCTR = searchConsole.length > 0 
-      ? searchConsole.reduce((sum: number, m: any) => sum + (m.data.ctr || 0), 0) / searchConsole.length 
-      : 0;
-    const avgPosition = searchConsole.length > 0 
-      ? searchConsole.reduce((sum: number, m: any) => sum + (m.data.position || 0), 0) / searchConsole.length 
-      : 0;
+    const totalClicks = searchConsole.reduce(
+      (sum: number, m: any) => sum + (m.data.clicks || 0),
+      0
+    );
+    const totalImpressions = searchConsole.reduce(
+      (sum: number, m: any) => sum + (m.data.impressions || 0),
+      0
+    );
+    const avgCTR =
+      searchConsole.length > 0
+        ? searchConsole.reduce(
+            (sum: number, m: any) => sum + (m.data.ctr || 0),
+            0
+          ) / searchConsole.length
+        : 0;
+    const avgPosition =
+      searchConsole.length > 0
+        ? searchConsole.reduce(
+            (sum: number, m: any) => sum + (m.data.position || 0),
+            0
+          ) / searchConsole.length
+        : 0;
 
     return {
       analytics: {
@@ -380,7 +413,7 @@ export const logoutClient = mutation({
   handler: async (ctx, args) => {
     const session = await ctx.db
       .query("dashboardSessions")
-      .withIndex("by_token", (q) => q.eq("sessionToken", args.sessionToken))
+      .withIndex("by_token", q => q.eq("sessionToken", args.sessionToken))
       .unique();
 
     if (session) {
@@ -394,15 +427,19 @@ export const logoutClient = mutation({
 // Demo data seeding
 export const seedDemoData = mutation({
   args: {},
-  handler: async (ctx) => {
+  handler: async ctx => {
     // Check if demo data already exists
     const existingTenant = await ctx.db
       .query("tenants")
-      .withIndex("by_domain", (q) => q.eq("domain", "demo.example.com"))
+      .withIndex("by_domain", q => q.eq("domain", "demo.example.com"))
       .unique();
 
     if (existingTenant) {
-      return { success: true, message: "Demo data already exists", tenantId: existingTenant._id };
+      return {
+        success: true,
+        message: "Demo data already exists",
+        tenantId: existingTenant._id,
+      };
     }
 
     // Create demo tenant
@@ -431,7 +468,7 @@ export const seedDemoData = mutation({
     for (let i = 0; i < 30; i++) {
       const date = new Date(today);
       date.setDate(date.getDate() - i);
-      const dateStr = date.toISOString().split('T')[0];
+      const dateStr = date.toISOString().split("T")[0];
 
       // Analytics metrics
       await ctx.db.insert("metrics", {

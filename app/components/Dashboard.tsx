@@ -24,7 +24,11 @@ interface DashboardProps {
   onLogout: () => void;
 }
 
-export function Dashboard({ sessionToken, sessionData, onLogout }: DashboardProps) {
+export function Dashboard({
+  sessionToken,
+  sessionData,
+  onLogout,
+}: DashboardProps) {
   const [dateRange, setDateRange] = useState(30);
   const logoutClient = useMutation(api.dashboard.logoutClient);
 
@@ -54,35 +58,61 @@ export function Dashboard({ sessionToken, sessionData, onLogout }: DashboardProp
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <div className="h-8 w-8 bg-green-500 rounded-lg flex items-center justify-center mr-3">
-                <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                <svg
+                  className="h-4 w-4 text-white"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                  />
                 </svg>
               </div>
               <div>
-                <h1 className="text-xl font-semibold text-white">{sessionData.tenant.name}</h1>
-                <p className="text-sm text-gray-400">{sessionData.tenant.domain}</p>
+                <h1 className="text-xl font-semibold text-white">
+                  {sessionData.tenant.name}
+                </h1>
+                <p className="text-sm text-gray-400">
+                  {sessionData.tenant.domain}
+                </p>
               </div>
             </div>
-            
+
             <div className="flex items-center space-x-4">
               <select
                 value={dateRange}
-                onChange={(e) => setDateRange(Number(e.target.value))}
+                onChange={e => setDateRange(Number(e.target.value))}
                 className="bg-gray-700 border border-gray-600 text-white text-sm rounded-lg px-3 py-2 focus:ring-2 focus:ring-green-500 focus:border-transparent"
               >
                 <option value={7}>Last 7 days</option>
                 <option value={30}>Last 30 days</option>
                 <option value={90}>Last 90 days</option>
               </select>
-              
+
               <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-300">{sessionData.client.name}</span>
+                <span className="text-sm text-gray-300">
+                  {sessionData.client.name}
+                </span>
                 <button
                   onClick={handleLogout}
                   className="text-gray-400 hover:text-white transition-colors"
                 >
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                  <svg
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                    />
                   </svg>
                 </button>
               </div>
@@ -96,7 +126,7 @@ export function Dashboard({ sessionToken, sessionData, onLogout }: DashboardProp
         {/* Google Connection Card */}
         {sessionData.client.role === "admin" && (
           <div className="mb-8">
-            <GoogleConnectionCard 
+            <GoogleConnectionCard
               sessionToken={sessionToken}
               isConnected={metrics.isGoogleConnected}
               googleAnalyticsPropertyId={metrics.googleAnalyticsPropertyId}
@@ -108,8 +138,18 @@ export function Dashboard({ sessionToken, sessionData, onLogout }: DashboardProp
         {/* Analytics Metrics */}
         <div className="mb-8">
           <h2 className="text-lg font-medium text-white mb-4 flex items-center">
-            <svg className="h-5 w-5 text-green-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            <svg
+              className="h-5 w-5 text-green-400 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+              />
             </svg>
             Google Analytics
             {!metrics.isGoogleConnected && (
@@ -150,8 +190,18 @@ export function Dashboard({ sessionToken, sessionData, onLogout }: DashboardProp
         {/* Search Console Metrics */}
         <div className="mb-8">
           <h2 className="text-lg font-medium text-white mb-4 flex items-center">
-            <svg className="h-5 w-5 text-green-400 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            <svg
+              className="h-5 w-5 text-green-400 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+              />
             </svg>
             Google Search Console
             {!metrics.isGoogleConnected && (
@@ -193,12 +243,12 @@ export function Dashboard({ sessionToken, sessionData, onLogout }: DashboardProp
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <ChartContainer
             title="Traffic Overview"
-            data={metrics.chartData.filter(d => d.source === 'analytics')}
+            data={metrics.chartData.filter(d => d.source === "analytics")}
             type="analytics"
           />
           <ChartContainer
             title="Search Performance"
-            data={metrics.chartData.filter(d => d.source === 'search_console')}
+            data={metrics.chartData.filter(d => d.source === "search_console")}
             type="search"
           />
         </div>

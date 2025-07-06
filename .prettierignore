@@ -1,0 +1,7 @@
+node_modules
+build
+public/build
+.cache
+convex/_generated
+package-lock.json
+*.log

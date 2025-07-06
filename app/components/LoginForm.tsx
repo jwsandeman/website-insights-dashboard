@@ -40,7 +40,7 @@ export function LoginForm({ onLogin }: LoginFormProps) {
     try {
       await seedDemoData();
       toast.success("Demo data created successfully!");
-    } catch (error) {
+    } catch {
       toast.error("Failed to create demo data");
     }
   };
@@ -50,8 +50,18 @@ export function LoginForm({ onLogin }: LoginFormProps) {
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <div className="mx-auto h-12 w-12 bg-green-500 rounded-lg flex items-center justify-center mb-4">
-            <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            <svg
+              className="h-6 w-6 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+              />
             </svg>
           </div>
           <h2 className="text-3xl font-bold text-white">Analytics Dashboard</h2>
@@ -61,7 +71,10 @@ export function LoginForm({ onLogin }: LoginFormProps) {
         <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <label htmlFor="tenantDomain" className="block text-sm font-medium text-gray-300">
+              <label
+                htmlFor="tenantDomain"
+                className="block text-sm font-medium text-gray-300"
+              >
                 Tenant Domain
               </label>
               <input
@@ -70,13 +83,16 @@ export function LoginForm({ onLogin }: LoginFormProps) {
                 type="text"
                 required
                 value={tenantDomain}
-                onChange={(e) => setTenantDomain(e.target.value)}
+                onChange={e => setTenantDomain(e.target.value)}
                 className="mt-1 block w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder="your-domain.com"
               />
             </div>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-300">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-300"
+              >
                 Email
               </label>
               <input
@@ -85,13 +101,16 @@ export function LoginForm({ onLogin }: LoginFormProps) {
                 type="email"
                 required
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={e => setEmail(e.target.value)}
                 className="mt-1 block w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder="your@email.com"
               />
             </div>
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-300">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-300"
+              >
                 Password
               </label>
               <input
@@ -100,7 +119,7 @@ export function LoginForm({ onLogin }: LoginFormProps) {
                 type="password"
                 required
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
                 className="mt-1 block w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-md text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
                 placeholder="••••••••"
               />
