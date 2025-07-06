@@ -6,7 +6,7 @@
   "scripts": {
     "build": "remix build",
     "dev": "npm-run-all --parallel dev:frontend dev:backend",
-    "dev:frontend": "remix dev --port 3000",
+    "dev:frontend": "vite dev --port 3000",
     "dev:backend": "convex dev",
     "start": "remix-serve build",
     "type-check": "tsc --noEmit",
