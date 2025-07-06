@@ -6,7 +6,7 @@
   "scripts": {
     "build": "remix build",
     "dev": "npm-run-all --parallel dev:frontend dev:backend",
-    "dev:frontend": "remix dev --manual",
+    "dev:frontend": "remix dev",
     "dev:backend": "convex dev",
     "start": "remix-serve build",
     "type-check": "tsc --noEmit",
