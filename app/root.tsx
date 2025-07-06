@@ -1,4 +1,5 @@
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction, LoaderFunctionArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -6,9 +7,11 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
 import { ConvexProvider, ConvexReactClient } from "convex/react";
 import { Toaster } from "sonner";
+import { useMemo } from "react";
 
 import stylesheet from "~/tailwind.css";
 
@@ -16,14 +19,22 @@ export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
 ];
 
-const convex = new ConvexReactClient(
-  typeof window !== "undefined"
-    ? (window as any)?.ENV?.VITE_CONVEX_URL ||
-      "https://sincere-cow-339.convex.cloud"
-    : "https://sincere-cow-339.convex.cloud"
-);
+export async function loader({ request }: LoaderFunctionArgs) {
+  return json({
+    ENV: {
+      VITE_CONVEX_URL: process.env.VITE_CONVEX_URL || "https://careful-bulldog-300.convex.cloud",
+    },
+  });
+}
 
 export default function App() {
+  const { ENV } = useLoaderData<typeof loader>();
+  
+  const convex = useMemo(
+    () => new ConvexReactClient(ENV.VITE_CONVEX_URL),
+    [ENV.VITE_CONVEX_URL]
+  );
+
   return (
     <html lang="en">
       <head>
@@ -31,6 +42,11 @@ export default function App() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.ENV = ${JSON.stringify(ENV)}`,
+          }}
+        />
       </head>
       <body>
         <ConvexProvider client={convex}>

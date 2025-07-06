@@ -42,6 +42,7 @@ export default function Index() {
     }
   };
 
+  // Show loading while checking session
   if (sessionToken && sessionData === undefined) {
     return (
       <div className="min-h-screen bg-gray-900 flex items-center justify-center">
@@ -50,6 +51,7 @@ export default function Index() {
     );
   }
 
+  // Show dashboard if logged in, otherwise show login form
   return (
     <div className="min-h-screen bg-gray-900">
       {sessionToken && sessionData ? (
