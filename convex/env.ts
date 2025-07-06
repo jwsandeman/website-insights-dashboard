@@ -11,7 +11,7 @@ export function validateGoogleOAuthEnv(): {
   const requiredVars = [
     "GOOGLE_CLIENT_ID",
     "GOOGLE_CLIENT_SECRET", 
-    "CONVEX_SITE_URL"
+    "SITE_URL"
   ];
 
   const missingVars = requiredVars.filter(varName => !process.env[varName]);
@@ -50,6 +50,6 @@ export function getGoogleOAuthConfig() {
   return {
     clientId: process.env.GOOGLE_CLIENT_ID!,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    siteUrl: process.env.CONVEX_SITE_URL!
+    siteUrl: process.env.SITE_URL!
   };
 }
