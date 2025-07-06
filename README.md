@@ -54,16 +54,12 @@ npm run dev:backend   # Convex dev server
 
 ### Railway Deployment
 
-1. **Connect to Railway**:
-   ```bash
-   # Install Railway CLI
-   npm install -g @railway/cli
-   
-   # Login and deploy
-   railway login
-   railway init
-   railway up
-   ```
+1. **Connect GitHub to Railway**:
+   - Push your code to GitHub
+   - Go to [Railway.app](https://railway.app) and create account
+   - Click "Deploy from GitHub repo" 
+   - Select your repository
+   - Railway will automatically detect Remix and deploy!
 
 2. **Environment Variables**:
    Set these in Railway dashboard:
@@ -73,10 +69,9 @@ npm run dev:backend   # Convex dev server
    GOOGLE_CLIENT_SECRET=your_google_client_secret
    ```
 
-3. **GitHub Integration**:
-   - Connect your GitHub repo to Railway
-   - Set `RAILWAY_TOKEN` secret in GitHub Actions
-   - Pushes to `main` will auto-deploy
+3. **Auto-deployment**:
+   - Every push to `main` automatically deploys
+   - No additional configuration needed!
 
 ### Multi-Tenant Setup for Your Clients
 
