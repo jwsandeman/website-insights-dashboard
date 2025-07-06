@@ -69,7 +69,7 @@ npm run dev:backend   # Convex dev server
    Set these in Railway dashboard:
 
    ```
-   VITE_CONVEX_URL=https://careful-bulldog-300.convex.cloud
+   VITE_CONVEX_URL=your_production_convex_url
    GOOGLE_CLIENT_ID=your_google_client_id
    GOOGLE_CLIENT_SECRET=your_google_client_secret
    ```

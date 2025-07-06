@@ -22,7 +22,7 @@ export const links: LinksFunction = () => [
 export async function loader({ request }: LoaderFunctionArgs) {
   return json({
     ENV: {
-      VITE_CONVEX_URL: process.env.VITE_CONVEX_URL || "https://careful-bulldog-300.convex.cloud",
+      CONVEX_URL: process.env.CONVEX_URL,
     },
   });
 }
@@ -31,8 +31,8 @@ export default function App() {
   const { ENV } = useLoaderData<typeof loader>();
   
   const convex = useMemo(
-    () => new ConvexReactClient(ENV.VITE_CONVEX_URL),
-    [ENV.VITE_CONVEX_URL]
+    () => new ConvexReactClient(ENV.CONVEX_URL!),
+    [ENV.CONVEX_URL]
   );
 
   return (
