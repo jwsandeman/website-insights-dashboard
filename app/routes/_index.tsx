@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import { LoginForm } from "../components/LoginForm";
-import { Dashboard } from "../components/Dashboard";
+import { LoginForm } from "~/components/LoginForm";
+import { Dashboard } from "~/components/Dashboard";
 
 export default function Index() {
   const [sessionToken, setSessionToken] = useState<string | null>(null);

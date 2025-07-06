@@ -10,7 +10,7 @@ import {
 import { ConvexProvider, ConvexReactClient } from "convex/react";
 import { Toaster } from "sonner";
 
-import stylesheet from "./tailwind.css";
+import stylesheet from "~/tailwind.css";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
